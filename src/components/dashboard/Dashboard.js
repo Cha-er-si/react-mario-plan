@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Notifications from "./Notifications";
 import ProjectList from "../projects/ProjectList";
 import { connect } from "react-redux";
+import { Navigate, Redirect, redirect } from "react-router-dom";
 
 // function Wrapper() {
 //   try {
@@ -29,26 +30,31 @@ import { connect } from "react-redux";
 
 export class Dashboard extends Component {
   render() {
-    const { projects } = this.props;
+    const { projects, auth } = this.props;
     // console.log({ dashboard: projects });
-    return (
-      <div className="dashboard container">
-        <div className="row">
-          <div className="col s12 m6">
-            <ProjectList projects={projects} />
-          </div>
-          <div className="col s12 m5 offset-m1">
-            <Notifications />
+    if (auth) {
+      return (
+        <div className="dashboard container">
+          <div className="row">
+            <div className="col s12 m6">
+              <ProjectList projects={projects} />
+            </div>
+            <div className="col s12 m5 offset-m1">
+              <Notifications />
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return <Navigate to="/signin" />;
+    }
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     projects: state.project.projects,
+    auth: state.auth.user,
   };
 };
 

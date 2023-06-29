@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 export class SignUp extends Component {
   state = {
@@ -19,53 +21,64 @@ export class SignUp extends Component {
     console.log(this.state);
   };
   render() {
-    return (
-      <div className="container">
-        <form className="white" onSubmit={this.handleSubmit}>
-          <h5 className="grey-text text-darken-3">Sign Up</h5>
-          <div className="input-field">
-            <label htmlFor="firstName">First Name</label>
-            <input
-              type="text"
-              name="firstName"
-              id="firstName"
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="input-field">
-            <label htmlFor="lastName">Last Name</label>
-            <input
-              type="text"
-              name="lastName"
-              id="lastName"
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="input-field">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="input-field">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              onChange={this.handleChange}
-            />
-          </div>
-          <div className="input-field">
-            <button className="btn grey lighten-1 z-depth-0">Submit</button>
-          </div>
-        </form>
-      </div>
-    );
+    const { auth } = this.props;
+    if (auth) {
+      return <Navigate to="/" />;
+    } else {
+      return (
+        <div className="container">
+          <form className="white" onSubmit={this.handleSubmit}>
+            <h5 className="grey-text text-darken-3">Sign Up</h5>
+            <div className="input-field">
+              <label htmlFor="firstName">First Name</label>
+              <input
+                type="text"
+                name="firstName"
+                id="firstName"
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="input-field">
+              <label htmlFor="lastName">Last Name</label>
+              <input
+                type="text"
+                name="lastName"
+                id="lastName"
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="input-field">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="input-field">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                onChange={this.handleChange}
+              />
+            </div>
+            <div className="input-field">
+              <button className="btn grey lighten-1 z-depth-0">Submit</button>
+            </div>
+          </form>
+        </div>
+      );
+    }
   }
 }
 
-export default SignUp;
+const mapStateToProps = (state) => {
+  return {
+    auth: state.auth.user,
+  };
+};
+
+export default connect(mapStateToProps)(SignUp);

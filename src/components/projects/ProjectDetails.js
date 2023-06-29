@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 
 function Wrapper() {
   const params = useParams();
@@ -8,45 +8,49 @@ function Wrapper() {
   return <ConnectedComponent params={params} />;
 }
 
-const ProjectDetails = ({ project }) => {
-  if (project.length != 0) {
-    const [data] = project;
-    const date = new Date(data.createdAt.seconds);
-    const options = {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      hour12: true,
-    };
-    const formattedDate = date.toLocaleString("en-US", options);
-    return (
-      <div className="container section project-details">
-        <div className="card z-depth-0">
-          <div className="card-content">
-            <span className="card-title">{data.title}</span>
-            <p>{data.content}</p>
-          </div>
-          <div className="card-action grey lighten-4 grey-text">
-            <div>
-              <span>Posted By: </span>
-              {data.authorFirstName + " " + data.authorLastName}
+const ProjectDetails = ({ project, auth }) => {
+  if (auth) {
+    if (project.length != 0) {
+      const [data] = project;
+      const date = new Date(data.createdAt.seconds);
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      };
+      const formattedDate = date.toLocaleString("en-US", options);
+      return (
+        <div className="container section project-details">
+          <div className="card z-depth-0">
+            <div className="card-content">
+              <span className="card-title">{data.title}</span>
+              <p>{data.content}</p>
             </div>
-            <div>
-              <span>Date Posted: </span>
-              {formattedDate}
+            <div className="card-action grey lighten-4 grey-text">
+              <div>
+                <span>Posted By: </span>
+                {data.authorFirstName + " " + data.authorLastName}
+              </div>
+              <div>
+                <span>Date Posted: </span>
+                {formattedDate}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="container center">
+          <p>Loading project...</p>
+        </div>
+      );
+    }
   } else {
-    return (
-      <div className="container center">
-        <p>Loading project...</p>
-      </div>
-    );
+    return <Navigate to="/signin" />;
   }
 };
 
@@ -58,6 +62,7 @@ const mapStateToProps = (state, ownProps) => {
   });
   return {
     project: data,
+    auth: state.auth.user,
   };
 };
 
