@@ -1,9 +1,8 @@
-import { initializeApp, firestore } from "@firebase/app";
-import "@firebase/firestore";
-import "@firebase/auth";
-import { getFirestore } from "@firebase/firestore";
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
+import "firebase/compat/auth";
 
-export const firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyCPdOCitqCRg3xG0XCFKceufvp4dYtCsfM",
   authDomain: "mario-plan-2c5b4.firebaseapp.com",
   projectId: "mario-plan-2c5b4",
@@ -13,7 +12,10 @@ export const firebaseConfig = {
   measurementId: "G-26R3NTR3ZV",
 };
 
-const app = initializeApp(firebaseConfig);
-export const firestoreConfig = getFirestore(app);
+// const app = initializeApp(firebaseConfig);
+// export const firestoreConfig = getFirestore(app);
 
-// export default firebase;
+firebase.initializeApp(firebaseConfig);
+firebase.firestore().settings({ timestampsInSnapshots: true, merge: true });
+
+export default firebase;

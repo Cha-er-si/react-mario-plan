@@ -1,9 +1,9 @@
 import { addDoc, collection, getDocs, onSnapshot } from "firebase/firestore";
-import { firestoreConfig } from "../../config/firebase";
+import firebase from "../../config/firebase";
 
 export const createProject = (project) => {
   return (dispatch, getState) => {
-    const collectionRef = collection(firestoreConfig, "projects");
+    const collectionRef = collection(firebase.firestore(), "projects");
     addDoc(collectionRef, {
       ...project,
       authorFirstName: "Someone",
@@ -21,9 +21,9 @@ export const createProject = (project) => {
   };
 };
 
-export const fetchProject = () => {
+export const fetchProjects = () => {
   return (dispatch) => {
-    const collectionRef = collection(firestoreConfig, "projects");
+    const collectionRef = collection(firebase.firestore(), "projects");
     onSnapshot(collectionRef, (snapshot) => {
       const querySnapshot = [];
       snapshot.docs.map((doc) => {
@@ -45,5 +45,13 @@ export const fetchProject = () => {
     //   .catch((error) => {
     //     console.log({ error });
     //   });
+  };
+};
+
+export const fetchProjectById = (projects, id) => {
+  return (dispatch) => {
+    const project = projects ? projects[id] : null;
+    console.log("Id Fetch", { project });
+    dispatch({ type: "FETCH_PROJECT_ID", project });
   };
 };

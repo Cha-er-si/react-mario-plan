@@ -7,10 +7,12 @@ import { createStore, applyMiddleware } from "redux";
 import rootReducer from "./store/reducers/rootReducer";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-import { fetchProject } from "./store/actions/projectActions";
+import { fetchProjects } from "./store/actions/projectActions";
+import { listenToAuthChange } from "./store/actions/authActions";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
-store.dispatch(fetchProject());
+store.dispatch(fetchProjects());
+store.dispatch(listenToAuthChange());
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>

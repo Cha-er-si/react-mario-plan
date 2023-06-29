@@ -2,38 +2,35 @@ import React, { Component } from "react";
 import Notifications from "./Notifications";
 import ProjectList from "../projects/ProjectList";
 import { connect } from "react-redux";
-import { collection, getDocs, onSnapshot } from "@firebase/firestore";
-import { firestoreConfig } from "../../config/firebase";
-import { fetchProject } from "../../store/actions/projectActions";
 
-function Wrapper() {
-  try {
-    const querySnapshot = [];
-    const collectionRef = collection(firestoreConfig, "projects");
-    // onSnapshot(collectionRef, (snapshot) => {
-    //   snapshot.docs.map((doc) => {
-    //     querySnapshot.push(doc.data());
-    //   });
-    // });
-    getDocs(collectionRef)
-      .then((res) => {
-        res.docs.map((doc) => {
-          querySnapshot.push(doc.data());
-        });
-      })
-      .catch((error) => {
-        console.log({ error });
-      });
-    return <ConnectedComponent snapshot={querySnapshot} />;
-  } catch (error) {
-    console.log({ error });
-  }
-}
+// function Wrapper() {
+//   try {
+//     const querySnapshot = [];
+//     const collectionRef = collection(firestoreConfig, "projects");
+//     // onSnapshot(collectionRef, (snapshot) => {
+//     //   snapshot.docs.map((doc) => {
+//     //     querySnapshot.push(doc.data());
+//     //   });
+//     // });
+//     getDocs(collectionRef)
+//       .then((res) => {
+//         res.docs.map((doc) => {
+//           querySnapshot.push(doc.data());
+//         });
+//       })
+//       .catch((error) => {
+//         console.log({ error });
+//       });
+//     return <ConnectedComponent snapshot={querySnapshot} />;
+//   } catch (error) {
+//     console.log({ error });
+//   }
+// }
 
 export class Dashboard extends Component {
   render() {
     const { projects } = this.props;
-    console.log({ dashboard: projects });
+    // console.log({ dashboard: projects });
     return (
       <div className="dashboard container">
         <div className="row">
@@ -49,8 +46,7 @@ export class Dashboard extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
-  console.log({ state, ownProps });
+const mapStateToProps = (state) => {
   return {
     projects: state.project.projects,
   };
@@ -58,4 +54,4 @@ const mapStateToProps = (state, ownProps) => {
 
 const ConnectedComponent = connect(mapStateToProps)(Dashboard);
 
-export default Wrapper;
+export default ConnectedComponent;

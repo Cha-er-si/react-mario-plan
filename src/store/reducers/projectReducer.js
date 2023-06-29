@@ -9,15 +9,17 @@ const initState = {
 const projectReducer = (state = initState, action) => {
   switch (action.type) {
     case "CREATE_PROJECT":
-      console.log("Created Project", action.project);
+      // console.log("Created Project", action.project);
       return state;
     case "CREATE_PROJECT_ERROR":
-      console.log("Created Project has Error", action.error);
+      // console.log("Created Project has Error", action.error);
       return state;
     case "FETCH_PROJECT_SUCCESS":
-      console.log("Fetch Success", action.firestoreData);
+      // console.log("Fetch Success", action.firestoreData);
       return { ...state, projects: action.firestoreData };
     // return state;
+    case "FETCH_PROJECT_ID":
+      return { document: action.project };
     default:
       return state;
   }
