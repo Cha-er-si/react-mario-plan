@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Navigate } from "react-router-dom";
+import { signUp } from "../../store/actions/authActions";
 
 export class SignUp extends Component {
   state = {
@@ -18,10 +19,12 @@ export class SignUp extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state);
+    this.props.signUp(this.state);
   };
+
   render() {
-    const { auth } = this.props;
+    const { auth, authError } = this.props;
+    // console.log({ authError });
     if (auth) {
       return <Navigate to="/" />;
     } else {
@@ -67,6 +70,16 @@ export class SignUp extends Component {
             </div>
             <div className="input-field">
               <button className="btn grey lighten-1 z-depth-0">Submit</button>
+              <div className="red-text center">
+                {authError ? (
+                  <p>
+                    {authError
+                      .replace("Firebase:", "")
+                      .replace("(auth/invalid-email).", "")
+                      .replace(" (auth/weak-password)", "")}
+                  </p>
+                ) : null}
+              </div>
             </div>
           </form>
         </div>
@@ -78,7 +91,16 @@ export class SignUp extends Component {
 const mapStateToProps = (state) => {
   return {
     auth: state.auth.user,
+    authError: state.auth.authError,
   };
 };
 
-export default connect(mapStateToProps)(SignUp);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signUp: (newUser) => {
+      return dispatch(signUp(newUser));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

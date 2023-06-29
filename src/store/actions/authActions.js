@@ -25,6 +25,31 @@ export const signOut = () => {
   };
 };
 
+export const signUp = (newUser) => {
+  return (dispatch) => {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(newUser.email, newUser.password)
+      .then((res) => {
+        return firebase
+          .firestore()
+          .collection("users")
+          .doc(res.user.uid)
+          .set({
+            firstName: newUser.firstName,
+            lastName: newUser.lastName,
+            initials: newUser.firstName[0] + newUser.lastName[0],
+          });
+      })
+      .then(() => {
+        dispatch({ type: "SIGNUP_SUCCESS" });
+      })
+      .catch((error) => {
+        dispatch({ type: "SIGNUP_ERROR", error });
+      });
+  };
+};
+
 export const listenToAuthChange = () => {
   return (dispatch) => {
     firebase.auth().onAuthStateChanged((user) => {
