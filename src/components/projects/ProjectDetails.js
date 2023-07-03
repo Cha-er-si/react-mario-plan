@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 import { connect } from "react-redux";
 import { Navigate, useParams } from "react-router-dom";
@@ -12,16 +13,7 @@ const ProjectDetails = ({ project, auth }) => {
   if (auth) {
     if (project.length != 0) {
       const [data] = project;
-      const date = new Date(data.createdAt.seconds);
-      const options = {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      };
-      const formattedDate = date.toLocaleString("en-US", options);
+
       return (
         <div className="container section project-details">
           <div className="card z-depth-0">
@@ -36,7 +28,7 @@ const ProjectDetails = ({ project, auth }) => {
               </div>
               <div>
                 <span>Date Posted: </span>
-                {formattedDate}
+                {moment(data.createdAt.toDate()).calendar()}
               </div>
             </div>
           </div>

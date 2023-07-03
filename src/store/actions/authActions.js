@@ -52,12 +52,11 @@ export const signUp = (newUser) => {
 
 export const listenToAuthChange = () => {
   return (dispatch) => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        console.log({ user });
-      } else {
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (!user) {
         console.log("Not Signed In");
       }
+
       dispatch({ type: "AUTH_CHANGE", user: user });
     });
   };

@@ -4,11 +4,13 @@ import firebase from "../../config/firebase";
 export const createProject = (project) => {
   return (dispatch, getState) => {
     const collectionRef = collection(firebase.firestore(), "projects");
+    const profile = getState().profile.profile;
+    const authorId = getState().auth.user.uid;
     addDoc(collectionRef, {
       ...project,
-      authorFirstName: "Someone",
-      authorLastName: "Unknown",
-      authorId: 12345,
+      authorFirstName: profile.firstName,
+      authorLastName: profile.lastName,
+      authorId: authorId,
       createdAt: new Date(),
     })
       .then((res) => {
@@ -34,17 +36,6 @@ export const fetchProjects = () => {
         firestoreData: querySnapshot,
       });
     });
-    // getDocs(collectionRef)
-    //   .then((res) => {
-    //     const querySnapshot = [];
-    //     res.docs.map((doc) => {
-    //       querySnapshot.push(doc.data());
-    //     });
-    //     dispatch({ type: "FETCH_PROJECT_SUCCESS", projects: querySnapshot });
-    //   })
-    //   .catch((error) => {
-    //     console.log({ error });
-    //   });
   };
 };
 

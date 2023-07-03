@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { createProject } from "../../store/actions/projectActions";
 import { connect } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+
+const Wrapper = () => {
+  const navigate = useNavigate();
+
+  return <ConnectedComponent navigate={navigate} />;
+};
 
 export class CreateProject extends Component {
   state = {
@@ -10,6 +16,7 @@ export class CreateProject extends Component {
   };
 
   handleChange = (e) => {
+    const { profile } = this.props;
     this.setState({
       [e.target.id]: e.target.value,
     });
@@ -17,7 +24,9 @@ export class CreateProject extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    const { navigate } = this.props;
     this.props.createProject(this.state);
+    navigate("/");
   };
 
   render() {
@@ -57,9 +66,10 @@ export class CreateProject extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
     auth: state.auth.user,
+    navigate: ownProps.navigate,
   };
 };
 
@@ -71,4 +81,9 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateProject);
+const ConnectedComponent = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CreateProject);
+
+export default Wrapper;
