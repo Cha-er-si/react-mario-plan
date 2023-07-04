@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { signUp } from "../../store/actions/authActions";
+import { userNotification } from "../../store/actions/notificationActions";
 
 export class SignUp extends Component {
   state = {
@@ -19,6 +20,11 @@ export class SignUp extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    const userDetails = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+    };
+    this.props.userNotification(userDetails);
     this.props.signUp(this.state);
   };
 
@@ -99,6 +105,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     signUp: (newUser) => {
       return dispatch(signUp(newUser));
+    },
+    userNotification: (details) => {
+      dispatch(userNotification(details));
     },
   };
 };

@@ -30,9 +30,14 @@ import { Navigate, Redirect, redirect } from "react-router-dom";
 
 export class Dashboard extends Component {
   render() {
-    const { projects, auth } = this.props;
+    const { projects, auth, notifications } = this.props;
+
     // console.log({ dashboard: projects });
     if (auth) {
+      const notif =
+        notifications && notifications.length > 3
+          ? notifications.slice(0, 3)
+          : notifications;
       return (
         <div className="dashboard container">
           <div className="row">
@@ -40,7 +45,7 @@ export class Dashboard extends Component {
               <ProjectList projects={projects} />
             </div>
             <div className="col s12 m5 offset-m1">
-              <Notifications />
+              <Notifications notifications={notif} />
             </div>
           </div>
         </div>
@@ -55,6 +60,7 @@ const mapStateToProps = (state) => {
   return {
     projects: state.project.projects,
     auth: state.auth.user,
+    notifications: state.notification.notification,
   };
 };
 

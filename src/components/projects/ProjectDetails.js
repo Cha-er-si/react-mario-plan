@@ -52,6 +52,7 @@ const mapStateToProps = (state, ownProps) => {
   const data = projects.filter((project) => {
     return project.id === id;
   });
+  console.log(state);
   return {
     project: data,
     auth: state.auth.user,

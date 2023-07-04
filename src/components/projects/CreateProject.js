@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { createProject } from "../../store/actions/projectActions";
 import { connect } from "react-redux";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { projectNotification } from "../../store/actions/notificationActions";
 
 const Wrapper = () => {
   const navigate = useNavigate();
@@ -25,8 +26,11 @@ export class CreateProject extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { navigate } = this.props;
+    this.props.projectNotification();
     this.props.createProject(this.state);
-    navigate("/");
+    setTimeout(() => {
+      navigate("/");
+    }, 500);
   };
 
   render() {
@@ -77,6 +81,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     createProject: (project) => {
       dispatch(createProject(project));
+    },
+    projectNotification: () => {
+      dispatch(projectNotification());
     },
   };
 };

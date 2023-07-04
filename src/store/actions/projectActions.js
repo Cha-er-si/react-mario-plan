@@ -25,17 +25,31 @@ export const createProject = (project) => {
 
 export const fetchProjects = () => {
   return (dispatch) => {
-    const collectionRef = collection(firebase.firestore(), "projects");
-    onSnapshot(collectionRef, (snapshot) => {
-      const querySnapshot = [];
-      snapshot.docs.map((doc) => {
-        querySnapshot.push({ id: doc.id, ...doc.data() });
+    firebase
+      .firestore()
+      .collection("projects")
+      .orderBy("createdAt", "desc")
+      .onSnapshot((snapshot) => {
+        const querySnapshot = [];
+        snapshot.docs.map((doc) => {
+          querySnapshot.push({ id: doc.id, ...doc.data() });
+        });
+        console.log({ querySnapshot });
+        dispatch({
+          type: "FETCH_PROJECT_SUCCESS",
+          firestoreData: querySnapshot,
+        });
       });
-      dispatch({
-        type: "FETCH_PROJECT_SUCCESS",
-        firestoreData: querySnapshot,
-      });
-    });
+    // onSnapshot(firebase.firestore().collection("projects"), (snapshot) => {
+    //   const querySnapshot = [];
+    //   snapshot.docs.map((doc) => {
+    //     querySnapshot.push({ id: doc.id, ...doc.data() });
+    //   });
+    //   dispatch({
+    //     type: "FETCH_PROJECT_SUCCESS",
+    //     firestoreData: querySnapshot,
+    //   });
+    // });
   };
 };
 
